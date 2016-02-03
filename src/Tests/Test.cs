@@ -9,10 +9,10 @@ namespace Tests
     [TestFixture]
     public class Test
     {
-        const string TestInputDirectory = "../../TestFiles";
-        const string TestOutputDirectory = "../../TestOutput";
-        const string TextInputFile = TestInputDirectory + "/Nudgu.Core.dll";
-        const string TestOutputFile = "output.cs";
+        static readonly string TestInputDirectory = Path.Combine("..", "..", "TestFiles");
+        static readonly string TestOutputDirectory = Path.Combine("..", "..", "TestOutput");
+        static readonly string TextInputFile = Path.Combine(TestInputDirectory, "Newtonsoft.Json.dll");
+        static readonly string TestOutputFile = "output.cs";
 
         [TearDown]
         public void TearDown()
