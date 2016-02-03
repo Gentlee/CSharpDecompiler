@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4336447F-7A2A-45E5-9F31-468EAD8BFD5B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="NDesk.Options">
+      <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Test.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="TestFiles\AdvancedTimer.Forms.Plugin.Abstractions.dll" />
+    <None Include="TestFiles\AdvancedTimer.Forms.Plugin.Android.dll" />
+    <None Include="TestFiles\Autofac.dll" />
+    <None Include="TestFiles\ExifLib.dll" />
+    <None Include="TestFiles\FormsViewGroup.dll" />
+    <None Include="TestFiles\Newtonsoft.Json.dll" />
+    <None Include="TestFiles\RestSharp.dll" />
+    <None Include="TestFiles\SQLite-net.dll" />
+    <None Include="TestFiles\SQLitePCL.raw.dll" />
+    <None Include="TestFiles\XLabs.Core.dll" />
+    <None Include="TestFiles\XLabs.Forms.dll" />
+    <None Include="TestFiles\Mono.Android.Export.dll" />
+    <None Include="TestFiles\System.Reflection.Emit.ILGeneration.dll" />
+    <None Include="TestFiles\System.Reflection.Emit.dll" />
+    <None Include="TestFiles\Xamarin.Android.Support.v4.dll" />
+    <None Include="TestFiles\Xamarin.Android.Support.v7.AppCompat.dll" />
+    <None Include="TestFiles\Xamarin.Forms.Platform.Android.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSharpDecompiler\CSharpDecompiler.csproj">
+      <Project>{ADFF3007-DC5B-4929-9472-B2B571CEFA6B}</Project>
+      <Name>CSharpDecompiler</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestFiles\" />
+    <Folder Include="TestOutput\" />
+  </ItemGroup>
+</Project>
