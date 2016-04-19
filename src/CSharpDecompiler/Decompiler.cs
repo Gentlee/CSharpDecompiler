@@ -12,6 +12,8 @@ namespace CSharpDecompiler
 {
     public class Decompiler
     {
+        readonly string[] _inputFileExtensions = new [] { ".dll", ".exe" };
+
         public void DecompileFile(string input, string output)
         {
             DecompileFile(input, File.CreateText(output));
@@ -31,7 +33,7 @@ namespace CSharpDecompiler
 
         public void DecompileFilesFromDirectory(string input, string output, string[] except = null, string regex = null)
         {
-            foreach (var file in EnumerateFiles(input, except, regex))
+            foreach (var file in EnumerateInputFiles(input, except, regex))
             {
                 DecompileFile(file, GetNewFilePath(file, output));
             }
@@ -39,15 +41,16 @@ namespace CSharpDecompiler
 
         public async Task DecompileFilesFromDirectoryParallel(string input, string output, string[] except = null, string regex = null)
         {
-            var tasks = EnumerateFiles(input, except, regex)
+            var tasks = EnumerateInputFiles(input, except, regex)
                 .Select(file => Task.Run(() => DecompileFile(file, GetNewFilePath(file, output))));
             
             await Task.WhenAll(tasks);
         }
 
-        IEnumerable<string> EnumerateFiles(string directory, string[] except, string regex)
+        IEnumerable<string> EnumerateInputFiles(string directory, string[] except, string regex)
         {
-            var files = Directory.EnumerateFiles(directory, "*.dll");
+            var files = Directory.EnumerateFiles(directory)
+                .Where(x => _inputFileExtensions.Contains(Path.GetExtension(x)));
 
             if (regex != null)
                 files = files.Where(x => Regex.IsMatch(Path.GetFileName(x), regex));

@@ -3,6 +3,7 @@ using System;
 using CSharpDecompiler;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -13,6 +14,7 @@ namespace Tests
         static readonly string TestOutputDirectory = Path.Combine("..", "..", "TestOutput");
         static readonly string TextInputFile = Path.Combine(TestInputDirectory, "Newtonsoft.Json.dll");
         static readonly string TestOutputFile = "output.cs";
+        static readonly string[] _inputExtensions = new [] { ".dll", ".exe" };
 
         [TearDown]
         public void TearDown()
@@ -20,10 +22,10 @@ namespace Tests
             if (File.Exists(TestOutputFile))
                 File.Delete(TestOutputFile);
 
-            foreach (var file in Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.cs"))
+            foreach (var file in EnumerateOutputFiles(Directory.GetCurrentDirectory()))
                 File.Delete(file);
 
-            foreach (var file in Directory.EnumerateFiles(TestOutputDirectory, "*.cs"))
+            foreach (var file in EnumerateOutputFiles(TestOutputDirectory))
                 File.Delete(file);
         }
 
@@ -71,8 +73,8 @@ namespace Tests
         {
             Run("{0} -p --output={1} --regex={2}", TestInputDirectory, TestOutputDirectory, @"^(?!Xamarin\.|System\.|Mono\.|mscorlib\.dll$)");
 
-            Assert.True(Directory.EnumerateFiles(TestOutputDirectory).Any());
-            Assert.True(Directory.EnumerateFiles(TestOutputDirectory, "*.cs").Select(x => Path.GetFileName(x)).All(x => !x.StartsWith("Xamarin.") && !x.StartsWith("System.") && !x.StartsWith("Mono.") && x != "mscorlib.cs"));
+            Assert.True(EnumerateOutputFiles(TestOutputDirectory).Any());
+            Assert.True(EnumerateOutputFiles(TestOutputDirectory).Select(x => Path.GetFileName(x)).All(x => !x.StartsWith("Xamarin.") && !x.StartsWith("System.") && !x.StartsWith("Mono.") && x != "mscorlib.cs"));
         }
 
         void Run(string format, params object[] args)
@@ -82,10 +84,20 @@ namespace Tests
 
         bool DecompileDirectorySuccessed(string input, string output)
         {
-            var testFiles = Directory.EnumerateFiles(input, "*.dll").Select(x => Path.GetFileNameWithoutExtension(x)).ToArray();
-            var outputFiles = Directory.EnumerateFiles(output, "*.cs").Select(x => Path.GetFileNameWithoutExtension(x)).ToArray();
+            var testFiles = EnumerateInputFiles(input).Select(x => Path.GetFileNameWithoutExtension(x)).ToArray();
+            var outputFiles = EnumerateOutputFiles(output).Select(x => Path.GetFileNameWithoutExtension(x)).ToArray();
 
             return testFiles.SequenceEqual(outputFiles);
+        }
+
+        IEnumerable<string> EnumerateInputFiles(string path)
+        {
+            return Directory.EnumerateFiles(path).Where(x => _inputExtensions.Contains(Path.GetExtension(x)));
+        }
+
+        IEnumerable<string> EnumerateOutputFiles(string path)
+        {
+            return Directory.EnumerateFiles(path, "*.cs");
         }
     }
 }

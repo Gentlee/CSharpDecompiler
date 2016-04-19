@@ -90,7 +90,7 @@ namespace CSharpDecompiler
         static void ShowHelp(OptionSet options)
         {
             Console.WriteLine("Usage: CSharpDecompiler [OPTIONS]+ (file|directory)");
-            Console.WriteLine("Decompiles .dll files to .cs");
+            Console.WriteLine("Decompiles .dll and .exe files to .cs");
             Console.WriteLine();
             Console.WriteLine("Options:");
             options.WriteOptionDescriptions(Console.Out);
